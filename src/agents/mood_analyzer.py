@@ -32,3 +32,7 @@ class MoodAnalyzerAgent:
             "original_mood": mood,
             "preferences": preferences
         }
+
+# Testing
+# agent = MoodAnalyzerAgent()
+# print(agent.analyze("romantic", "bollywood"))
