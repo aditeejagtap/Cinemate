@@ -2,6 +2,10 @@
 
 An agentic service that suggests movies based on your mood using multiple AI agents powered by Groq.
 
+## Try Cinemate here : 
+
+`https://cinemate12.streamlit.app` 
+
 ## Architecture
 
 Cinemate uses three specialized agents:
