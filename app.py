@@ -50,10 +50,13 @@ def get_orchestrator():
 st.title("🎬 Cinemate")
 st.subheader("AI-powered movie recommendations based on your mood")
 
-# Check API key
+# Check API keys
 if not os.getenv("GROQ_API_KEY"):
     st.error("⚠️ Groq API key not found. Please set GROQ_API_KEY in your .env file")
     st.stop()
+
+if not os.getenv("TMDB_API_KEY"):
+    st.warning("⚠️ TMDB API key not found. Movie posters will not be displayed. Get one free at https://www.themoviedb.org/settings/api")
 
 # Input section
 with st.form("mood_form"):
@@ -102,13 +105,31 @@ if submitted:
                 
                 for i, movie in enumerate(response.recommendations, 1):
                     genres = " • ".join(movie.genre)
-                    st.markdown(f"""
-                        <div class="movie-card">
-                            <div class="movie-title">{i}. {movie.title}</div>
-                            <div class="movie-meta">📅 {movie.year} | 🎭 {genres}</div>
-                            <div class="movie-reason">💡 {movie.reason}</div>
-                        </div>
-                    """, unsafe_allow_html=True)
+                    
+                    if movie.poster_url:
+                        # Show with poster in 2 columns
+                        col1, col2 = st.columns([1, 3])
+                        
+                        with col1:
+                            st.image(movie.poster_url, width=150)
+                        
+                        with col2:
+                            st.markdown(f"""
+                                <div class="movie-card">
+                                    <div class="movie-title">{i}. {movie.title}</div>
+                                    <div class="movie-meta">📅 {movie.year} | 🎭 {genres}</div>
+                                    <div class="movie-reason">💡 {movie.reason}</div>
+                                </div>
+                            """, unsafe_allow_html=True)
+                    else:
+                        # Show full width without poster
+                        st.markdown(f"""
+                            <div class="movie-card">
+                                <div class="movie-title">{i}. {movie.title}</div>
+                                <div class="movie-meta">📅 {movie.year} | 🎭 {genres}</div>
+                                <div class="movie-reason">💡 {movie.reason}</div>
+                            </div>
+                        """, unsafe_allow_html=True)
                 
             except Exception as e:
                 st.error(f"❌ Error: {str(e)}")

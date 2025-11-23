@@ -11,7 +11,7 @@ class MoodAnalyzerAgent:
         and extract key emotional states, preferences, and movie characteristics that would match.
         Return a concise analysis focusing on: emotional tone, energy level, and suitable movie themes."""
     
-    def analyze(self, mood: str, preferences: str = None) -> dict:
+    def analyze(self, mood: str, preferences: str = None) -> dict:    # -> dict - indicates return type
         """Analyze mood and return structured insights."""
         user_message = f"Mood: {mood}"
         if preferences:

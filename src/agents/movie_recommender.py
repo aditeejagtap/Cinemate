@@ -13,7 +13,7 @@ class MovieRecommenderAgent:
         Return ONLY valid JSON with this exact structure:
         {"movies": [{"title": "Movie Name", "year": 2020, "genre": ["Drama", "Thriller"], "reason": "Why this matches the mood"}]}"""
     
-    def recommend(self, mood_analysis: dict) -> list:
+    def recommend(self, mood_analysis: dict) -> list:        # -> list - indicates return type
         """Generate movie recommendations based on mood analysis."""
         user_message = f"""Mood Analysis: {mood_analysis['mood_analysis']}
         Original Mood: {mood_analysis['original_mood']}"""

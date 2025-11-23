@@ -23,7 +23,9 @@ pip install -r requirements.txt
 ```bash
 copy .env.example .env
 ```
-Edit `.env` and add your Groq API key (get one free at https://console.groq.com)
+Edit `.env` and add your API keys:
+- **GROQ_API_KEY**: Get free at https://console.groq.com
+- **TMDB_API_KEY**: Get free at https://www.themoviedb.org/settings/api (for movie posters)
 
 ## Usage
 

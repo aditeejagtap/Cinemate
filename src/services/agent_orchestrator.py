@@ -1,7 +1,10 @@
 from src.agents.mood_analyzer import MoodAnalyzerAgent
 from src.agents.movie_recommender import MovieRecommenderAgent
 from src.agents.response_formatter import ResponseFormatterAgent
+from src.services.poster_service import PosterService
 from src.models.schemas import MovieRequest, MovieResponse, Movie
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 
 class AgentOrchestrator:
@@ -11,6 +14,8 @@ class AgentOrchestrator:
         self.mood_analyzer = MoodAnalyzerAgent()
         self.movie_recommender = MovieRecommenderAgent()
         self.response_formatter = ResponseFormatterAgent()
+        self.poster_service = PosterService()
+        self.executor = ThreadPoolExecutor(max_workers=5)
     
     async def process_request(self, request: MovieRequest) -> MovieResponse:
         """Process movie recommendation request through agent pipeline."""
@@ -30,7 +35,24 @@ class AgentOrchestrator:
             movie_count=len(raw_recommendations)
         )
         
-        # Step 4: Structure response
+        # Step 4: Fetch posters concurrently
+        loop = asyncio.get_event_loop()
+        poster_tasks = [
+            loop.run_in_executor(
+                self.executor,
+                self.poster_service.get_poster,
+                movie['title'],
+                movie['year']
+            )
+            for movie in raw_recommendations
+        ]
+        posters = await asyncio.gather(*poster_tasks)
+        
+        # Step 5: Add posters to recommendations
+        for movie, poster_url in zip(raw_recommendations, posters):
+            movie['poster_url'] = poster_url
+        
+        # Step 6: Structure response
         movies = [Movie(**movie) for movie in raw_recommendations]
         
         return MovieResponse(

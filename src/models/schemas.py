@@ -12,6 +12,7 @@ class Movie(BaseModel):
     year: int
     genre: List[str]
     reason: str
+    poster_url: Optional[str] = None
 
 
 class MovieResponse(BaseModel):
